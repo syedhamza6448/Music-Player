@@ -5,13 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Player</title>
-    <!-- Own -->
-    <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Own -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="music-player-icon.png">
 </head>
 
 <body style="background: #2ECC71;">
@@ -23,12 +26,36 @@
                 <div class="cd-circle c2"></div>
                 <div class="cd-circle c3"></div>
                 <div class="cd-circle c4">
-                    <div class="cover-img"></div>
+                    <i class="fa fa-music music-icon"></i>
                 </div>
             </div>
         </div>
-        
+        <div class="song-info">
+            <div class="song-title">Song Title</div>
+            <div class="artist-name">Artist Name</div>
+        </div>
+        <div class="controls">
+            <div class="loop-shuffle">
+                <button id="loop"><i class="fa fa-repeat fa-xl"></i></button>
+                <button id="shuffle"><i class="fa fa-shuffle fa-xl"></i></button>
+            </div>
+            <div class="time-info">
+                <span id="current-time">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+            <input type="range" id="progress">
+            <div class="buttons">
+                <button id="prev"><i class="fa fa-backward fa-xl"></i></button>
+                <button id="play-pause"><i class="fa fa-play fa-xl"></i></button>
+                <button id="next"><i class="fa fa-forward fa-xl"></i></button>
+            </div>
+        </div>
+        <audio id="audio"></audio>
     </div>
+    <button class="upload-button">
+        <i class="fa fa-upload"></i>
+        <div class="tooltip">Click To Upload A Song</div>
+    </button>
     <script src="script.js"></script>
 </body>
 
