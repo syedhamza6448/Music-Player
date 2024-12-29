@@ -1,0 +1,97 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat";
+}
+
+.music-player {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    background: #2ECC71;
+}
+
+.music-player h1 {
+    color: #136F63;
+    font-size: 40px;
+}
+
+.cd {
+    width: 500px;
+    height: 500px;
+    position: relative;
+    border-radius: 50%;
+}
+
+.cd-circle {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.586);
+}
+
+.c1 {
+    background: linear-gradient(135deg, gray, black);
+    width: 400px;
+    height: 400px;
+}
+
+.c2 {
+    background: linear-gradient(135deg, black, gray);
+    width: 300px;
+    height: 300px;
+    top: 100px;
+    left: 100px;
+}
+
+.c3 {
+    background: linear-gradient(135deg, gray, black);
+    width: 200px;
+    height: 200px;
+    top: 150px;
+    left: 150px;
+    border: 5px solid rgba(255, 255, 255, 0.586);
+}
+
+.cover-img {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-image: url(departue-lane.png);
+    background-position: center;
+    background-size: contain;
+    top: 100px;
+    left: 100px;
+    border-radius: 50%;
+}
+.r-left {
+    animation: r-left 10s infinite linear;
+}
+.r-right{
+    animation: r-right 10s infinite linear;
+}
+
+@keyframes r-right {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes r-left {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-360deg);
+    }
+}
