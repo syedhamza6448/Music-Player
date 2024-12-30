@@ -5,7 +5,6 @@
     font-family: "Montserrat";
 }
 body {
-    /* margin: 50px 0; */
 }
 
 .music-player {
@@ -286,6 +285,112 @@ audio {
     transition: opacity 0.2s ease;
     white-space: nowrap;
 }
+
+.hamburger-icon {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    width: 50px;
+    height: 50px;
+    background-color: #136F63;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.hamburger-icon i {
+    color: #2ECC71;
+    font-size: 24px;
+}
+
+.hamburger-icon:hover {
+    background-color: #2ECC71;
+    color: #FFF;
+}
+
+.hamburger-icon:hover i {
+    color: #FFF;
+}
+
+.song-queue {
+    position: fixed;
+    top: 0;
+    left: -25vw;
+    width: 25vw;
+    height: 100vh;
+    background-color: #136F63;
+    color: #FFF;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    z-index: 1000;
+}
+
+.song-queue.active {
+    left: 0;
+}
+
+.song-queue h2 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.song-queue ul {
+    list-style: none;
+    padding: 0;
+}
+
+.song-queue li {
+    padding: 10px;
+    border-bottom: 1px solid #2ECC71;
+    cursor: grab;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.song-queue li .song-title {
+    font-weight: bold;
+}
+
+.song-queue li .artist-name {
+    font-weight: lighter;
+    font-size: 14px;
+}
+
+.song-queue li .remove-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #FFF;
+    font-size: 16px;
+    display: none;
+    cursor: pointer;
+}
+
+.song-queue li:hover .remove-icon {
+    display: block;
+}
+
+.song-queue li.dragging {
+    opacity: 0.5;
+}
+
+.song-queue li.playing {
+    background-color: #2ECC71;
+    color: #136F63;
+}
+
+.status-indicator {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
 @media (max-width: 500px) {
     .music-player {
         margin-left: 100px;

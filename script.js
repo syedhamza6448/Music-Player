@@ -1,7 +1,20 @@
 const songs = JSON.parse(localStorage.getItem('songs')) || [
-    { src: "COME THROUGH.mp3", title: "COME THROUGH", artist: "Talha Anjum (Prod. Umair)" },
-    { src: "Departure Lane.mp3", title: "Departure Lane", artist: "Talha Anjum (Prod. Umair)" },
-    { src: "song3.mp3", title: "Song 3", artist: "Artist 3" }
+    {
+        src: "COME THROUGH.mp3",
+        title: "COME THROUGH",
+        artist: "Talha Anjum (Prod. Umair)" 
+    },
+    { 
+        src: "Departure Lane.mp3",
+        title: "Departure Lane", 
+        artist: "Talha Anjum (Prod. Umair)" 
+    },
+    { 
+        src: "Heartbreak Kid.mp3",
+        title: "Heartbreak Kid", 
+        artist: "Talha Anjum, Umair" 
+    },
+    
 ];
 let currentSongIndex = 0;
 let isLooping = false;
@@ -19,6 +32,12 @@ const artistName = document.querySelector('.artist-name');
 const currentTimeElement = document.getElementById('current-time');
 const durationElement = document.getElementById('duration');
 const uploadButton = document.querySelector('.upload-button');
+const hamburgerIcon = document.querySelector('.hamburger-icon');
+const songQueue = document.querySelector('.song-queue');
+const songList = document.getElementById('song-list');
+const statusIndicator = document.createElement('div');
+statusIndicator.className = 'status-indicator';
+songQueue.insertBefore(statusIndicator, songQueue.querySelector('ul'));
 
 playPauseButton.addEventListener('click', () => {
     togglePlayPause();
@@ -32,6 +51,7 @@ loopButton.addEventListener('click', () => {
         isShuffling = false;
         shuffleButton.classList.remove('active');
     }
+    updateStatusIndicator();
 });
 
 shuffleButton.addEventListener('click', () => {
@@ -41,6 +61,7 @@ shuffleButton.addEventListener('click', () => {
         isLooping = false;
         loopButton.classList.remove('active');
     }
+    updateStatusIndicator();
 });
 
 nextButton.addEventListener('click', () => {
@@ -104,11 +125,23 @@ uploadButton.addEventListener('click', () => {
                 songs.push(newSong);
                 localStorage.setItem('songs', JSON.stringify(songs));
                 alert('Song uploaded successfully!');
+                renderSongList();
+                currentSongIndex = songs.length - 1;
+                playSong();
             };
             reader.readAsDataURL(file);
         }
     };
     input.click();
+});
+
+hamburgerIcon.addEventListener('click', () => {
+    songQueue.classList.toggle('active');
+    if (songQueue.classList.contains('active')) {
+        hamburgerIcon.innerHTML = '<i class="fa fa-times"></i>';
+    } else {
+        hamburgerIcon.innerHTML = '<i class="fa fa-bars"></i>';
+    }
 });
 
 function togglePlayPause() {
@@ -133,7 +166,6 @@ function togglePlayPause() {
 
 function playSong() {
     audio.src = songs[currentSongIndex].src;
-    console.log(`Playing: ${songs[currentSongIndex].src}`);
     songTitle.textContent = songs[currentSongIndex].title;
     artistName.textContent = songs[currentSongIndex].artist;
     audio.play().then(() => {
@@ -147,6 +179,7 @@ function playSong() {
     document.querySelector('.c2').classList.remove('paused');
     document.querySelector('.c3').classList.remove('paused');
     document.querySelector('.music-icon').classList.remove('paused');
+    highlightCurrentSong();
 }
 
 function formatTime(seconds) {
@@ -155,5 +188,113 @@ function formatTime(seconds) {
     return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
-// Initialize the first song
+function renderSongList() {
+    songList.innerHTML = '';
+    songs.forEach((song, index) => {
+        const li = document.createElement('li');
+        li.draggable = true;
+        li.dataset.index = index;
+        li.addEventListener('dragstart', handleDragStart);
+        li.addEventListener('dragover', handleDragOver);
+        li.addEventListener('drop', handleDrop);
+        li.addEventListener('click', () => {
+            currentSongIndex = index;
+            playSong();
+        });
+
+        const songTitle = document.createElement('div');
+        songTitle.className = 'song-title';
+        songTitle.textContent = song.title;
+
+        const artistName = document.createElement('div');
+        artistName.className = 'artist-name';
+        artistName.textContent = song.artist;
+
+        const removeIcon = document.createElement('i');
+        removeIcon.className = 'fa fa-times remove-icon';
+        removeIcon.addEventListener('click', (event) => {
+            event.stopPropagation();
+            removeSong(index);
+        });
+
+        li.appendChild(songTitle);
+        li.appendChild(artistName);
+        li.appendChild(removeIcon);
+
+        songList.appendChild(li);
+    });
+    highlightCurrentSong();
+}
+
+function handleDragStart(event) {
+    event.dataTransfer.setData('text/plain', event.target.dataset.index);
+    event.target.classList.add('dragging');
+}
+
+function handleDragOver(event) {
+    event.preventDefault();
+    const dragging = document.querySelector('.dragging');
+    const target = event.target;
+    if (target && target !== dragging && target.nodeName === 'LI') {
+        const bounding = target.getBoundingClientRect();
+        const offset = bounding.y + bounding.height / 2;
+        if (event.clientY - offset > 0) {
+            target.style['border-bottom'] = 'solid 4px #2ECC71';
+            target.style['border-top'] = '';
+        } else {
+            target.style['border-top'] = 'solid 4px #2ECC71';
+            target.style['border-bottom'] = '';
+        }
+    }
+}
+
+function handleDrop(event) {
+    event.preventDefault();
+    const dragging = document.querySelector('.dragging');
+    const target = event.target;
+    if (target && target.nodeName === 'LI') {
+        const fromIndex = dragging.dataset.index;
+        const toIndex = target.dataset.index;
+        songs.splice(toIndex, 0, songs.splice(fromIndex, 1)[0]);
+        localStorage.setItem('songs', JSON.stringify(songs));
+        renderSongList();
+    }
+    dragging.classList.remove('dragging');
+    target.style['border-bottom'] = '';
+    target.style['border-top'] = '';
+}
+
+function highlightCurrentSong() {
+    const songItems = document.querySelectorAll('#song-list li');
+    songItems.forEach((item, index) => {
+        if (index == currentSongIndex) {
+            item.classList.add('playing');
+        } else {
+            item.classList.remove('playing');
+        }
+    });
+}
+
+function removeSong(index) {
+    songs.splice(index, 1);
+    localStorage.setItem('songs', JSON.stringify(songs));
+    renderSongList();
+    if (currentSongIndex >= songs.length) {
+        currentSongIndex = songs.length - 1;
+    }
+    playSong();
+}
+
+function updateStatusIndicator() {
+    if (isLooping) {
+        statusIndicator.textContent = 'Loop is enabled';
+    } else if (isShuffling) {
+        statusIndicator.textContent = 'Shuffle is enabled';
+    } else {
+        statusIndicator.textContent = '';
+    }
+}
+
 playSong();
+renderSongList();
+updateStatusIndicator();
