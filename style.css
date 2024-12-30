@@ -396,3 +396,28 @@ audio {
         margin-left: 100px;
     }
 }
+.portfolio {
+    position: fixed;
+    left: -35px;
+    bottom: 120px;
+    transform: rotate(90deg);
+    padding: 0;
+    margin: 0;
+}
+
+.portfolio a {
+    font-size: medium;
+    background-color: #FFD9AB;
+    padding: 10px 5px 50px 5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: #4e342e;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.5s;
+}
+
+.portfolio a:hover {
+    background-color: #4e342e;
+    color: #FFD9AB;
+}
